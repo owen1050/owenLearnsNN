@@ -43,16 +43,16 @@ class NetworkUtil:
 
         return net
 
-    def genAllOnesNetwork(self, param):
+    def genAllNNetwork(self, param, n):
         net = network.Network(param)
 
         for lay in net.layers:
             for node in lay.nodes:
                 numWeights = len(node.weights)
-                node.setBias(1)
+                node.setBias(n)
                 weights = []
                 for i in range(numWeights):
-                    weights.append(1)
+                    weights.append(n)
                 node.setWeights(weights)
 
         return net

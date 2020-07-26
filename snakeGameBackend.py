@@ -9,6 +9,7 @@ class SnakeGame:
         self.HEIGHT = 30
         self.fruitPos = [int(self.WIDTH/2), int(self.HEIGHT/2)]
         self.score = 0
+        self.steps = 0
 
     def setSnake(self, snake):
         self.snake = snake
@@ -27,6 +28,7 @@ class SnakeGame:
 
 
     def incSnake(self):
+        self.steps = self.steps + 1
         curr = self.snake[0]
             
         if self.snakeDirection == 0:
@@ -55,6 +57,14 @@ class SnakeGame:
 
         newSnake.insert(0,new)
         self.snake = newSnake
+
+        if self.steps > 100 * (self.score + 1):
+            self.gameOver = True
+
+    def getData(self):
+        d1 = self.distToFruit()
+        d2 = self.distToObs()
+        return d1 + d2
 
     def distToFruit(self):
         x = self.fruitPos[0] - self.snake[0][0]

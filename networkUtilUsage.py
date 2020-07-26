@@ -5,7 +5,7 @@ numNetPerGen = 5
 
 nu = networkUtil.NetworkUtil()
 
-n1 = nu.genAllOnesNetwork([[2,16], [16,16], [16,4]])
+n1 = nu.genAllOnesNetwork([[6,16], [16,16], [16,4]])
 
 bias, weights = nu.getBiasAndWeights(n1)
 
