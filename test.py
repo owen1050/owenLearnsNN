@@ -1,16 +1,17 @@
-import networkUtil
+import snakeGameBackend
 
-networks = []
-numNetPerGen = 5
+game = snakeGameBackend.SnakeGame()
 
-nu = networkUtil.NetworkUtil()
+print(game.snake[0])
 
-n1 = nu.genAllOnesNetwork([[2,16], [16,16], [16,4]])
+minR, minL, minU, minD = game.distToObs()
 
-bias, weights = nu.getBiasAndWeights(n1)
+print(minR, minL, minU, minD)
 
-for i in range(numNetPerGen):
-    networks.append(nu.genRandomNetworkBasedOffBiasAndWeight(bias, weights, 0.2))
+fruitX, fruitY = game.distToFruit()
 
-for network in networks:
-    print(network, network.prop([1,2]))
+print(game.fruitPos)
+
+print(fruitX, fruitY)
+
+print(game.score)

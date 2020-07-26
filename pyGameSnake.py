@@ -1,24 +1,16 @@
 import pygame, time, random, snakeGameBackend
 from pygame.locals import *
 
-
-
-#snake init
-WIDTH = 20
-HEIGHT = 30
-
-gameOver = False
-snake = [(1,1),(1,0),(0,0)]
-snakeDirection = 1 #0 is up, 1 is right, 2 is down, 3 is left
-fruitPos = (int(WIDTH/2), int(HEIGHT/2))
-score = 0
+game = snakeGameBackend.SnakeGame()
 
 #pygame init
 GAMESIZE = 25
-WINDOW_WIDTH = WIDTH * GAMESIZE
-WINDOW_HEIGHT = HEIGHT * GAMESIZE
+WINDOW_WIDTH = game.WIDTH * GAMESIZE
+WINDOW_HEIGHT = game.HEIGHT * GAMESIZE
 BLACK = (0,0,0)
 WHITE = (255, 255, 255)
+
+score = 0
 
 pygame.init()
 
@@ -30,20 +22,20 @@ fruitPic = pygame.image.load('fruit.png')
 snakePic = pygame.image.load("snake.png")
 
 def checkKeys(event):
-    global snakeDirection
-    print(event)
+    global game
+    #print(event)
     if event.find("KeyDown") > 0:
         if event.find("1073741906") > 0:
-            snakeDirection = 0
+            game.setSnakeDirection(0)
 
         if event.find("1073741903") > 0:
-            snakeDirection = 1
+            game.setSnakeDirection(1)
 
         if event.find("1073741905") > 0:
-            snakeDirection = 2
+            game.setSnakeDirection(2)
 
         if event.find("1073741904") > 0:
-            snakeDirection = 3
+            game.setSnakeDirection(3)
 
 def text_objects(text, font):
     global WHITE
@@ -60,31 +52,31 @@ def dispScore():
 tickCounter = 0
 tickRate = 40
 
-while not gameOver:
+while not game.gameOver:
     tickCounter = tickCounter + 1
     gameDisplay.fill(BLACK)
 
-    for s in snake:
+    for s in game.snake:
         gameDisplay.blit(snakePic, (s[0] * GAMESIZE, s[1] * GAMESIZE))
 
-    gameDisplay.blit(fruitPic, (fruitPos[0] * GAMESIZE, fruitPos[1] * GAMESIZE))
+    gameDisplay.blit(fruitPic, (game.fruitPos[0] * GAMESIZE, game.fruitPos[1] * GAMESIZE))
     dispScore()
 
     pygame.display.update()
 
-    if tickCounter > 5:
-        snakeGameBackend.incSnake()
+    if tickCounter > 4:
+        game.incSnake()
         tickCounter = 0
-    if score > 3:
+
+    if game.score > 3:
         tickRate = 60
     
     for event in pygame.event.get():
         checkKeys(str(event))
         if event.type == pygame.QUIT:
-            gameOver = True
+            game.gameOver = True
 
     clock.tick(tickRate)
     
-
 pygame.quit()
 quit()
