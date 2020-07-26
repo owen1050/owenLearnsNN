@@ -1,10 +1,16 @@
-import network
+import networkUtil
 
-n = network.Network([[2,4], [4,2]])
-print(n)
-for lay in n.layers:
-    for node in lay.nodes:
-        node.setBias(1)
-        node.setAllWeights(1)
+networks = []
+numNetPerGen = 5
 
-print(n.prop([1,1]))
+nu = networkUtil.NetworkUtil()
+
+n1 = nu.genAllOnesNetwork([[2,16], [16,16], [16,4]])
+
+bias, weights = nu.getBiasAndWeights(n1)
+
+for i in range(numNetPerGen):
+    networks.append(nu.genRandomNetworkBasedOffBiasAndWeight(bias, weights, 0.2))
+
+for network in networks:
+    print(network, network.prop([1,2]))
