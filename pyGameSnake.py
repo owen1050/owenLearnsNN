@@ -78,5 +78,4 @@ while not game.gameOver:
 
     clock.tick(tickRate)
     
-pygame.quit()
-quit()
+exit()

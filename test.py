@@ -1,4 +1,4 @@
-import snakeGameBackend, networkUtil, time
+import snakeGameBackend, networkUtil, time, pyGameSnake, threading
 
 game = snakeGameBackend.SnakeGame()
 
@@ -12,16 +12,17 @@ nu = networkUtil.NetworkUtil()
 n1 = nu.genAllNNetwork([[8,32], [32,32], [32,32], [32,4]], 1)
 bestNetworks = [n1]
 
+generation = 0
+
 while True:
+    generation = generation + 1
     bias, weights = nu.getBiasAndWeights(bestNetworks[0])
     networks = []
     
     for i in range(numNetPerGen):
-        networks.append(nu.genRandomNetworkBasedOffBiasAndWeight(bias, weights, 4))
-    num = 10
-    if len(bestNetworks) < 10:
-        num = len(bestNetworks)
-    networks = networks + bestNetworks[0:num-1]
+        networks.append(nu.genRandomNetworkBasedOffBiasAndWeight(bias, weights, 10))
+    
+    networks = networks + bestNetworks
 
     grades = []
     for net in networks:
@@ -40,10 +41,21 @@ while True:
 
 
     bestGrade = max(grades)
-    bestNetworks = []
-    for gi in range(len(grades)):
-        if grades[gi] == bestGrade:
-            bestNetworks.append(networks[gi])
+    bestGradeIndex = grades.index(bestGrade)
+    net = networks[bestGradeIndex]
 
-    print(bestGrade, len(bestNetworks), len(networks))
-    #print(bias, weights)
+    pyGame = pyGameSnake()
+
+    while not pyGame.game.gameOver:
+        res = net.prop(pyGame.game.getData())
+        pyGame.game.setSnakeDirection(res.index(max(res)))
+
+
+    bestNetworks = []
+    while len(bestNetworks) < numNetPerGen / 10:
+        mi = grades.index(max(grades))
+        bestNetworks.append(networks[mi])
+        grades.pop(mi)
+        networks.pop(mi)
+
+    print("The best grade for generation", generation ,"was" , bestGrade)

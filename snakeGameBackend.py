@@ -52,6 +52,7 @@ class SnakeGame:
             self.fruitPos = [nfx, nfy]
             newSnake = self.snake[:]
             self.score = self.score + 1
+            self.steps = 0
         else:
             newSnake = self.snake[:-1]
 
@@ -67,9 +68,12 @@ class SnakeGame:
         return d1 + d2
 
     def distToFruit(self):
-        x = self.fruitPos[0] - self.snake[0][0]
-        y = self.fruitPos[1] - self.snake[0][1]
-        return x,y
+        r = self.fruitPos[0] - self.snake[0][0]
+        l = self.snake[0][0] - self.fruitPos[0]
+
+        u = self.fruitPos[1] - self.snake[0][1]
+        d = self.snake[0][1] - self.fruitPos[1]
+        return r, l, u, d
 
     def distToObs(self):
         x = self.snake[0][0]
