@@ -27,8 +27,9 @@ class Node:
     def getOutput(self, inputs):
         out = 0
         for i in range(len(inputs)):
-            out = out + self.weights[i] * inputs[i] * self.bias
-
+            out = out + self.weights[i] * inputs[i]
+        
+        out = out + self.bias
         return self.relu(out)
 
     def relu(self, input):

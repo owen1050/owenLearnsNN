@@ -1,4 +1,4 @@
-import snakeGameBackend, networkUtil, time, pyGameSnake, threading
+import snakeGameBackend, networkUtil, time, threading
 
 game = snakeGameBackend.SnakeGame()
 
@@ -9,7 +9,7 @@ numNetPerGen = 100
 
 nu = networkUtil.NetworkUtil()
 
-n1 = nu.genAllNNetwork([[8,32], [32,32], [32,32], [32,4]], 1)
+n1 = nu.genAllNNetwork([[8,32], [32,32], [32,32], [32,4]], 0)
 bestNetworks = [n1]
 
 generation = 0
@@ -43,13 +43,17 @@ while True:
     bestGrade = max(grades)
     bestGradeIndex = grades.index(bestGrade)
     net = networks[bestGradeIndex]
+    
+    bias = []
+    weights = []
+    for lay in net.layers:
+        for node in lay.nodes:
+            bias.append(node.bias)
+            weights.append(node.weights)
 
-    pyGame = pyGameSnake()
-
-    while not pyGame.game.gameOver:
-        res = net.prop(pyGame.game.getData())
-        pyGame.game.setSnakeDirection(res.index(max(res)))
-
+    f = open("output.txt", "w")
+    
+    f.write("|" + str(bias) + "|" + str(weights) + "|")
 
     bestNetworks = []
     while len(bestNetworks) < numNetPerGen / 10:
